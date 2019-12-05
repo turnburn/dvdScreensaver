@@ -1,12 +1,28 @@
 
 import ScreenSaver
 
+// Found here : http://homecoffeecode.com/nsimage-tinted-as-easily-as-a-uiimage/
+extension NSImage {
+    func tinting(with tintColor: NSColor) -> NSImage {
+        guard let cgImage = self.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return self }
+        
+        return NSImage(size: size, flipped: false) { bounds in
+            guard let context = NSGraphicsContext.current?.cgContext else { return false }
+            tintColor.set()
+            context.clip(to: bounds, mask: cgImage)
+            context.fill(bounds)
+            return true
+        }
+    }
+}
+
 class dvdScreensaverView: ScreenSaverView {
     
     private var dvdPosition: CGPoint = .zero
     private var dvdVelocity: CGVector = .zero
     private let dvdHeight: CGFloat = 173.5
     private let dvdWidth: CGFloat = 220
+    var tintColor = NSColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     var image: NSImage?
     
     // MARK: - Initialization
@@ -58,11 +74,9 @@ class dvdScreensaverView: ScreenSaverView {
     }
     
     private func drawDVD() {
-        if let image = image {
-            let point = CGPoint(x: dvdPosition.x, y: dvdPosition.y)
-            image.draw(at: point, from: NSZeroRect, operation: NSCompositingOperation.sourceOver, fraction: 1)
-        }
-
+        let point = CGPoint(x: dvdPosition.x, y: dvdPosition.y)
+        image = image?.tinting(with: tintColor)
+        image?.draw(at: point, from: NSZeroRect, operation: NSCompositingOperation.sourceOver, fraction: 1)
     }
     
     private func drawBackground(_ color: NSColor) {
@@ -77,9 +91,11 @@ class dvdScreensaverView: ScreenSaverView {
         let oobAxes = dvdIsOOB()
         if oobAxes.xAxis {
             dvdVelocity.dx *= -1
+            tintColor = NSColor(red: CGFloat(Float(arc4random()) / Float(UINT32_MAX)), green: CGFloat(Float(arc4random()) / Float(UINT32_MAX)), blue: CGFloat(Float(arc4random()) / Float(UINT32_MAX)), alpha: 1.0)
         }
         if oobAxes.yAxis {
             dvdVelocity.dy *= -1
+            tintColor = NSColor(red: CGFloat(Float(arc4random()) / Float(UINT32_MAX)), green: CGFloat(Float(arc4random()) / Float(UINT32_MAX)), blue: CGFloat(Float(arc4random()) / Float(UINT32_MAX)), alpha: 1.0)
         }
         
         dvdPosition.x += dvdVelocity.dx
