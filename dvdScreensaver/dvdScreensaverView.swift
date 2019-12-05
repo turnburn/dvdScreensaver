@@ -48,7 +48,7 @@ class dvdScreensaverView: ScreenSaverView {
     
     func loadImage() {
         DispatchQueue.global().async() {
-            let url = NSURL(string: "https://img.itch.zone/aW1nLzE3MTE3MjcucG5n/original/rySJh4.png")
+            let url = NSURL(string: "https://raw.githubusercontent.com/turnburn/dvdScreensaver/master/dvdScreensaver/dvd.png")
             let data = NSData(contentsOf: url! as URL)
             if let data = data {
                 self.image = NSImage(data: data as Data)
