@@ -20,8 +20,8 @@ class dvdScreensaverView: ScreenSaverView {
     
     private var dvdPosition: CGPoint = .zero
     private var dvdVelocity: CGVector = .zero
-    private let dvdHeight: CGFloat = 173.5
-    private let dvdWidth: CGFloat = 220
+    private let dvdHeight: CGFloat = 138
+    private let dvdWidth: CGFloat = 225
     var tintColor = NSColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     var image: NSImage?
     
